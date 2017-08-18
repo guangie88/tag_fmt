@@ -1,0 +1,6 @@
+[submodule "deps/rustfp"]
+	path = deps/rustfp
+	url = https://github.com/guangie88/rustfp.git
+[submodule "deps/Catch"]
+	path = deps/Catch
+	url = https://github.com/philsquared/Catch.git
