@@ -48,3 +48,12 @@ TEST_CASE("Simple tag formatter test case #2", "[simple_2]") {
     const auto replaced_content = move(apply_res).unwrap_unchecked();
     REQUIRE(replaced_content == "Hello World");
 }
+
+TEST_CASE("Simple tag formatter test case #3", "[simple_3]") {
+    // meant to fail
+    static constexpr auto STR = "{h} {w}";
+
+    const auto formatter = ::tag_fmt::make_formatter();
+    auto apply_res = formatter.apply(STR);
+    REQUIRE(apply_res.is_err());
+}

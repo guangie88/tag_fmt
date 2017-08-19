@@ -615,35 +615,42 @@ namespace tag_fmt {
                     machine_res.push_back(fmt_char);
                     break;
 
-                case '{':
+                case '{': {
                     next_state = tag_state::open_curly_bracket;
 
                     // insert tag value
-                    insert_fmt_value(machine_buf, machine_res);
+                    auto insert_res = insert_fmt_value(machine_buf, machine_res);
+                    RUSTFP_RET_IF_ERR(insert_res);
+
                     machine_buf.clear();
                     machine_buf.push_back(fmt_char);
 
                     break;
+                }
 
-                case '\0':
+                case '\0': {
                     next_state = tag_state::end;
 
                     // insert tag value
-                    insert_fmt_value(machine_buf, machine_res);
+                    auto insert_res = insert_fmt_value(machine_buf, machine_res);
+                    RUSTFP_RET_IF_ERR(insert_res);
                     machine_buf.clear();
 
                     break;
+                }
 
-                default:
+                default: {
                     next_state = tag_state::normal_text;
 
                     // insert tag value
-                    insert_fmt_value(machine_buf, machine_res);
+                    auto insert_res = insert_fmt_value(machine_buf, machine_res);
+                    RUSTFP_RET_IF_ERR(insert_res);
+
                     machine_buf.clear();
                     machine_res.push_back(fmt_char);
 
                     break;
-                }
+                }}
 
                 break;
 
@@ -732,12 +739,12 @@ namespace tag_fmt {
     
             for (size_t index = 0; content[index] != '\0'; ++index) {
                 auto state_res = manage_tag_state_machine(content[index]);
-                RUSTFP_LET(_, state_res);
+                RUSTFP_RET_IF_ERR(state_res);
             }
 
             // needs the additional null character to end off the process
             auto state_res = manage_tag_state_machine('\0');
-            RUSTFP_LET(_, state_res);
+            RUSTFP_RET_IF_ERR(state_res);
             return Ok(string(machine_res.cbegin(), machine_res.cend()));
 
         } catch (const exception &e) {
