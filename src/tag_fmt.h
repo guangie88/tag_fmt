@@ -36,7 +36,8 @@ namespace tag_fmt {
         /**
          * Copier type alias for tag value.
          */
-        using tag_value_copier_t = std::unique_ptr<void, tag_value_deleter_t> (*)(const std::unique_ptr<void, tag_value_deleter_t> &);
+        using tag_value_copier_t = std::unique_ptr<void, tag_value_deleter_t>
+            (*)(const std::unique_ptr<void, tag_value_deleter_t> &);
 
         /** 
          * Provides description of the type that the tag value holds.
@@ -133,7 +134,8 @@ namespace tag_fmt {
          * @param content str_type content which should contain the tags for
          * string replacements. Must be null terminated for defined behaviour.
          */
-        auto apply(const char content[]) const -> ::rustfp::Result<std::string, std::string>;
+        auto apply(const char content[]) const ->
+            ::rustfp::Result<std::string, std::string>;
 
         /**
          * Applies stored list of tag_rpms for replacement on the given string
@@ -141,7 +143,8 @@ namespace tag_fmt {
          * @param content str_type content which should contain the tags for
          * string replacements.
          */
-        auto apply(const std::string &content) const -> ::rustfp::Result<std::string, std::string>;
+        auto apply(const std::string &content) const ->
+            ::rustfp::Result<std::string, std::string>;
 
         /**
          * Sets the mapping between tag name to the string value to
@@ -205,7 +208,8 @@ namespace tag_fmt {
             using udeleter_ptr_t = std::unique_ptr<void, tag_value_deleter_t>;
 
             return [](const udeleter_ptr_t &rhs) {
-                return udeleter_ptr_t(new T(*static_cast<const T *>(rhs.get())), rhs.get_deleter());
+                return udeleter_ptr_t(
+                    new T(*static_cast<const T *>(rhs.get())), rhs.get_deleter());
             };
         }
 
@@ -223,7 +227,9 @@ namespace tag_fmt {
          */
         template <class invalid_type>
         struct tag_value_impl {
-            static_assert(sizeof(invalid_type) < 0, "Usage of invalid_type type for tag_value_impl.");
+            static_assert(sizeof(invalid_type) < 0,
+                "Usage of invalid_type type for tag_value_impl.");
+
             static constexpr tag_value_type type = tag_value_type::invalid_type;
         };
 
@@ -326,7 +332,9 @@ namespace tag_fmt {
 
         inline tag_value::tag_value(const char value[]) :
             copier(make_copier<std::string>()),
-            value_ptr(static_cast<void *>(new std::string(value)), details::make_deleter<std::string>()),
+            value_ptr(
+                static_cast<void *>(new std::string(value)),
+                details::make_deleter<std::string>()),
             type(tag_value_impl<std::string>::type) {
             
         }
@@ -401,7 +409,9 @@ namespace tag_fmt {
             using std::string;
             using std::vector;
 
-            const auto find_tag_value = [&tag_rpms](const string &tag_name) -> Result<const tag_value &, string> {
+            const auto find_tag_value = [&tag_rpms](const string &tag_name) ->
+                Result<const tag_value &, string> {
+
                 const auto tap_rpms_itr = tag_rpms.find(tag_name);
 
                 if (tap_rpms_itr == tag_rpms.cend()) {
@@ -411,17 +421,23 @@ namespace tag_fmt {
                 return Ok(cref(tap_rpms_itr->second));
             };
 
-            const auto insert_fmt_value = [&find_tag_value](const vector<char> &imbued_tag_and_fmt, vector<char> &result) -> Result<unit_t, string> {
+            const auto insert_fmt_value =
+                [&find_tag_value](const vector<char> &imbued_tag_and_fmt, vector<char> &result) ->
+                    Result<unit_t, string> {
+
                 static constexpr char TARGET_CHARS[] = ":}";
 
-                const auto imbued_tag_split_itr = find_first_of(imbued_tag_and_fmt.cbegin(), imbued_tag_and_fmt.cend(),
+                const auto imbued_tag_split_itr = find_first_of(
+                    imbued_tag_and_fmt.cbegin(), imbued_tag_and_fmt.cend(),
                     cbegin(TARGET_CHARS), cend(TARGET_CHARS));
 
                 const string tag_name(imbued_tag_and_fmt.cbegin() + 1, imbued_tag_split_itr);
                 auto tag_res = find_tag_value(tag_name);
                 RUSTFP_LET_REF(tag, tag_res);
 
-                const auto imbued_fmt = "{" + string(imbued_tag_split_itr, imbued_tag_and_fmt.cend());
+                const auto imbued_fmt = "{" + string(
+                    imbued_tag_split_itr, imbued_tag_and_fmt.cend());
+
                 string fmt_value;
 
                 switch (tag.get_type()) {
@@ -489,10 +505,11 @@ namespace tag_fmt {
                 return Ok(Unit);
             };
 
-            const auto transfer_buf_to_res = [](std::vector<char> &buffer, std::vector<char> &result) {
-                result.insert(result.cend(), buffer.cbegin(), buffer.cend());
-                buffer.clear();
-            };
+            const auto transfer_buf_to_res =
+                [](std::vector<char> &buffer, std::vector<char> &result) {
+                    result.insert(result.cend(), buffer.cbegin(), buffer.cend());
+                    buffer.clear();
+                };
             
             auto next_state = tag_state::error;
 
@@ -711,7 +728,9 @@ namespace tag_fmt {
         }
     }
 
-    inline auto formatter::apply(const char content[]) const -> ::rustfp::Result<std::string, std::string> {
+    inline auto formatter::apply(const char content[]) const ->
+        ::rustfp::Result<std::string, std::string> {
+
         // std
         using std::exception;
         using std::move;
@@ -730,12 +749,17 @@ namespace tag_fmt {
             vector<char> machine_buf;
             vector<char> machine_res;
 
-            const auto manage_tag_state_machine = [this, &machine_buf, &machine_res, &state](const char fmt_char) -> Result<unit_t, string> {
-                auto state_res = details::exec_tag_state_machine(fmt_char, state, tag_rpms, machine_buf, machine_res);
-                RUSTFP_LET(state_buf, state_res);
-                state = state_buf;
-                return Ok(Unit);
-            };
+            const auto manage_tag_state_machine =
+                [this, &machine_buf, &machine_res, &state](const char fmt_char) ->
+                    Result<unit_t, string> {
+
+                    auto state_res = details::exec_tag_state_machine(
+                        fmt_char, state, tag_rpms, machine_buf, machine_res);
+
+                    RUSTFP_LET(state_buf, state_res);
+                    state = state_buf;
+                    return Ok(Unit);
+                };
     
             for (size_t index = 0; content[index] != '\0'; ++index) {
                 auto state_res = manage_tag_state_machine(content[index]);
@@ -750,6 +774,12 @@ namespace tag_fmt {
         } catch (const exception &e) {
             return Err(string(e.what()));
         }
+    }
+
+    inline auto formatter::apply(const std::string &content) const ->
+        ::rustfp::Result<std::string, std::string> {
+
+        return apply(content.c_str());
     }
 
     template <class T>

@@ -14,6 +14,7 @@ TEST_CASE("Simple tag formatter test case #0", "[simple_0]") {
     static constexpr auto STR = "Hello World";
     const auto formatter = ::tag_fmt::make_formatter();
 
+    // uses char[] overload
     auto apply_res = formatter.apply(STR);
     REQUIRE(apply_res.is_ok());
 
@@ -22,11 +23,12 @@ TEST_CASE("Simple tag formatter test case #0", "[simple_0]") {
 }
 
 TEST_CASE("Simple tag formatter test case #1", "[simple_1]") {
-    static constexpr auto STR = "Hello {w}";
+    static const auto STR = string("Hello {w}");
 
     const auto formatter = ::tag_fmt::make_formatter()
         .set_mapping("w", "World");
     
+    // uses string overload
     auto apply_res = formatter.apply(STR);
     REQUIRE(apply_res.is_ok());
 
