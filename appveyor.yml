@@ -15,6 +15,5 @@ clone_script:
 build_script:
   - mkdir build
   - cd build
-  - cmake .. -G "Visual Studio 14 Win64"
-  - msbuild /m:4 /p:Configuration=Debug tag_fmt.sln
-  - msbuild /m:4 /p:Configuration=Release tag_fmt.sln
+  - cmake .. -G "%GENERATOR% Win64"
+  - msbuild /m:4 /p:Configuration=%CONFIG% tag_fmt.sln
