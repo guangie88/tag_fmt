@@ -788,10 +788,10 @@ namespace tag_fmt {
 
         if (tag_rpm_itr == tag_rpms.cend()) {
             // empty, so emplace new value
-            tag_rpms.emplace(tag, details::tag_value(std::move(value)));
+            tag_rpms.emplace(tag, details::tag_value(std::forward<T>(value)));
         } else {
             // key exists, so replace the value
-            tag_rpm_itr->second = details::tag_value(std::move(value));
+            tag_rpm_itr->second = details::tag_value(std::forward<T>(value));
         }
 
         return *this;
@@ -800,7 +800,7 @@ namespace tag_fmt {
     template <class T>
     auto formatter::set_mapping(const std::string &tag, T &&value) && -> formatter {
         // calls the lvalue version
-        return std::move(this->set_mapping(tag, std::move(value)));
+        return std::move(this->set_mapping(tag, std::forward<T>(value)));
     }
 
     inline auto make_formatter() -> formatter {
