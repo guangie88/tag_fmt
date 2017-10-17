@@ -1,0 +1,10 @@
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/tag_fmt-targets.cmake")
+
+get_target_property(
+  TAG_FMT_INCLUDE_DIRS
+  tag_fmt INTERFACE_INCLUDE_DIRECTORIES)
+
+set_and_check(TAG_FMT_INCLUDE_DIRS "${TAG_FMT_INCLUDE_DIRS}")
+set(TAG_FMT_LIBRARIES tag_fmt)
