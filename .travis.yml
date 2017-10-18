@@ -34,7 +34,7 @@ script:
 - cd ..
 - mkdir build-release
 - cd build-release
-- cmake .. -DCMAKE_BUILD_TYPE=Release -DTAG_FMT_INCLUDE_UNIT_TESTS=ON
+- cmake .. -DCMAKE_BUILD_TYPE=Release -DTAG_FMT_INCLUDE_UNIT_TESTS=ON -DCMAKE_INSTALL_PREFIX:PATH=install
 - cmake --build . --target install -- -j2
 - cd ..
 
