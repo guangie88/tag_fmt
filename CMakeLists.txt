@@ -13,25 +13,21 @@ endif()
 add_compile_options("$<$<CONFIG:DEBUG>:${DEBUG_FLAGS}>")
 include(CMakeToolsHelpers OPTIONAL)
 
-add_subdirectory(deps/Catch)
-add_subdirectory(deps/fmt)
+# fmt and Catch do not have modular CMake mechanism
 add_subdirectory(deps/rustfp)
 
 # tag_fmt
 add_library(tag_fmt INTERFACE)
 
-# since fmt does not have a robust CMake mechanism
-# tag_fmt subsumes all the include operations of it
 target_include_directories(tag_fmt
   INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/deps/fmt/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/deps/fmt>
     $<INSTALL_INTERFACE:include>)
 
 target_link_libraries(tag_fmt
   INTERFACE
-    fmt
     rustfp)
 
 install(TARGETS tag_fmt EXPORT tag_fmt)
