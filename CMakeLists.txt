@@ -59,16 +59,18 @@ install(
   "${CMAKE_CURRENT_BINARY_DIR}/cmake/tag_fmt-config-version.cmake"
   DESTINATION lib/cmake/tag_fmt)
 
-# unit_test
-add_executable(unit_test
-  src/unit_test/unit_test.cpp)
+# tag_fmt_unit_test
+if(TAG_FMT_INCLUDE_UNIT_TESTS)
+  add_executable(tag_fmt_unit_test
+    src/unit_test/unit_test.cpp)
 
-set_property(TARGET unit_test PROPERTY CXX_STANDARD 14)
+  set_property(TARGET tag_fmt_unit_test PROPERTY CXX_STANDARD 14)
 
-target_include_directories(unit_test
-  PRIVATE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/deps/Catch/include>)
+  target_include_directories(tag_fmt_unit_test
+    PRIVATE
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/deps/Catch/include>)
 
-target_link_libraries(unit_test
-  PRIVATE
-    tag_fmt)
+  target_link_libraries(tag_fmt_unit_test
+    PRIVATE
+      tag_fmt)
+endif()

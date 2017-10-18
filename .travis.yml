@@ -29,20 +29,20 @@ script:
 - git submodule update --init --recursive
 - mkdir build-debug
 - cd build-debug
-- cmake .. -DCMAKE_BUILD_TYPE=Debug
+- cmake .. -DCMAKE_BUILD_TYPE=Debug -DTAG_FMT_INCLUDE_UNIT_TESTS=ON
 - cmake --build . -- -j2
 - cd ..
 - mkdir build-release
 - cd build-release
-- cmake .. -DCMAKE_BUILD_TYPE=Release
-- cmake --build . -- -j2
+- cmake .. -DCMAKE_BUILD_TYPE=Release -DTAG_FMT_INCLUDE_UNIT_TESTS=ON
+- cmake --build . --target install -- -j2
 - cd ..
 
 after_success:
 - doxygen Doxyfile
 
 # run unit test and code coverage
-- ./build-debug/unit_test -s
-- ./build-release/unit_test -s
-# - gcov ./build-debug/CMakeFiles/unit_test.dir/src/unit_test/unit_test.cpp.gcno
+- ./build-debug/tag_fmt_unit_test -s
+- ./build-release/tag_fmt_unit_test -s
+# - gcov ./build-debug/CMakeFiles/tag_fmt_unit_test.dir/src/unit_test/unit_test.cpp.gcno
 # - bash <(curl -s https://codecov.io/bash)
