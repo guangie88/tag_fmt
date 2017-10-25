@@ -64,6 +64,9 @@ if(TAG_FMT_INCLUDE_UNIT_TESTS)
   add_executable(tag_fmt_unit_test
     src/unit_test/unit_test.cpp)
 
+  enable_testing()
+  add_test(tag_fmt_unit_test tag_fmt_unit_test -s --force-colour)
+
   set_property(TARGET tag_fmt_unit_test PROPERTY CXX_STANDARD 14)
 
   target_include_directories(tag_fmt_unit_test

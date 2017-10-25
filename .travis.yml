@@ -71,8 +71,7 @@ script:
               -DTAG_FMT_INCLUDE_UNIT_TESTS=ON ..
       )
       cmake --build . --target install -- -j 2
-      ./tag_fmt_unit_test -s
-      # ctest -V
+      ctest -V
     done
   - popd
 
