@@ -76,4 +76,14 @@ if(TAG_FMT_INCLUDE_UNIT_TESTS)
   target_link_libraries(tag_fmt_unit_test
     PRIVATE
       tag_fmt)
+
+  if(TAG_FMT_INCLUDE_TEST_COVERAGE)
+    target_compile_options(tag_fmt_unit_test
+      PRIVATE
+        -coverage)
+
+    target_link_libraries(tag_fmt_unit_test
+      PRIVATE
+        gcov)
+  endif()
 endif()
